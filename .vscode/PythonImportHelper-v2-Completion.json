@@ -1,0 +1,170 @@
+[
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "string",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "string",
+        "description": "string",
+        "detail": "string",
+        "documentation": {}
+    },
+    {
+        "label": "tensorflow",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tensorflow",
+        "description": "tensorflow",
+        "detail": "tensorflow",
+        "documentation": {}
+    },
+    {
+        "label": "tensorflow_datasets",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tensorflow_datasets",
+        "description": "tensorflow_datasets",
+        "detail": "tensorflow_datasets",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "clean_text",
+        "kind": 2,
+        "importPath": "app_final",
+        "description": "app_final",
+        "peekOfCode": "def clean_text(input_text):\n    # Replace URLs in the text\n    input_text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', input_text)\n    # Remove numbers\n    input_text = re.sub(r'\\d+', '', input_text)\n    # Remove punctuation\n    translator = str.maketrans('', '', string.punctuation.replace('?', ''))\n    input_text = input_text.translate(translator)\n    return input_text\ndef tokenize_text(text):",
+        "detail": "app_final",
+        "documentation": {}
+    },
+    {
+        "label": "tokenize_text",
+        "kind": 2,
+        "importPath": "app_final",
+        "description": "app_final",
+        "peekOfCode": "def tokenize_text(text):\n    seq = encoder.encode(text)\n    return seq\ndef checkForBullying(text):\n    encoded_text = tokenize_text(text)\n    output = ensemble_model(np.array([encoded_text]), training=False).numpy()\n    labels = ['Not Controversial', 'Controversial']\n    highest_index = np.argmax(output)\n    predicted_label = labels[highest_index]\n    # Calculate the sum of the output array",
+        "detail": "app_final",
+        "documentation": {}
+    },
+    {
+        "label": "checkForBullying",
+        "kind": 2,
+        "importPath": "app_final",
+        "description": "app_final",
+        "peekOfCode": "def checkForBullying(text):\n    encoded_text = tokenize_text(text)\n    output = ensemble_model(np.array([encoded_text]), training=False).numpy()\n    labels = ['Not Controversial', 'Controversial']\n    highest_index = np.argmax(output)\n    predicted_label = labels[highest_index]\n    # Calculate the sum of the output array\n    sum_output = sum(output[0])\n    for i in range(len(output[0])):\n        output[0][i] = output[0][i] / sum_output * 100",
+        "detail": "app_final",
+        "documentation": {}
+    },
+    {
+        "label": "hello",
+        "kind": 2,
+        "importPath": "app_final",
+        "description": "app_final",
+        "peekOfCode": "def hello():\n    return 'Hello, World!'\n@app.route('/predict', methods=['POST'])\ndef predict():\n    try:\n        text = request.get_json().get('text')\n        if not text:\n            return jsonify({'error': 'Text is missing in the request.'}), 400\n        cleaned_text = clean_text(text)\n        if not cleaned_text:",
+        "detail": "app_final",
+        "documentation": {}
+    },
+    {
+        "label": "predict",
+        "kind": 2,
+        "importPath": "app_final",
+        "description": "app_final",
+        "peekOfCode": "def predict():\n    try:\n        text = request.get_json().get('text')\n        if not text:\n            return jsonify({'error': 'Text is missing in the request.'}), 400\n        cleaned_text = clean_text(text)\n        if not cleaned_text:\n            return jsonify({'error': 'Cleaned text is empty after preprocessing.'}), 400\n        predicted_label, output = checkForBullying(cleaned_text)\n        output = output.tolist()",
+        "detail": "app_final",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "app_final",
+        "description": "app_final",
+        "peekOfCode": "app = Flask(__name__)\nmodel_path = os.path.join(os.path.dirname(__file__), 'dcnn_model.h5')\nencoder_path = os.path.join(os.path.dirname(__file__), 'tokenized_encoder')\n# Load the DCNN model and encoder\nensemble_model = tf.keras.models.load_model(model_path, compile=False)\nencoder = tfds.deprecated.text.SubwordTextEncoder.load_from_file(encoder_path)\ncounter=0\ndef clean_text(input_text):\n    # Replace URLs in the text\n    input_text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', input_text)",
+        "detail": "app_final",
+        "documentation": {}
+    },
+    {
+        "label": "model_path",
+        "kind": 5,
+        "importPath": "app_final",
+        "description": "app_final",
+        "peekOfCode": "model_path = os.path.join(os.path.dirname(__file__), 'dcnn_model.h5')\nencoder_path = os.path.join(os.path.dirname(__file__), 'tokenized_encoder')\n# Load the DCNN model and encoder\nensemble_model = tf.keras.models.load_model(model_path, compile=False)\nencoder = tfds.deprecated.text.SubwordTextEncoder.load_from_file(encoder_path)\ncounter=0\ndef clean_text(input_text):\n    # Replace URLs in the text\n    input_text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', input_text)\n    # Remove numbers",
+        "detail": "app_final",
+        "documentation": {}
+    },
+    {
+        "label": "encoder_path",
+        "kind": 5,
+        "importPath": "app_final",
+        "description": "app_final",
+        "peekOfCode": "encoder_path = os.path.join(os.path.dirname(__file__), 'tokenized_encoder')\n# Load the DCNN model and encoder\nensemble_model = tf.keras.models.load_model(model_path, compile=False)\nencoder = tfds.deprecated.text.SubwordTextEncoder.load_from_file(encoder_path)\ncounter=0\ndef clean_text(input_text):\n    # Replace URLs in the text\n    input_text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', input_text)\n    # Remove numbers\n    input_text = re.sub(r'\\d+', '', input_text)",
+        "detail": "app_final",
+        "documentation": {}
+    },
+    {
+        "label": "ensemble_model",
+        "kind": 5,
+        "importPath": "app_final",
+        "description": "app_final",
+        "peekOfCode": "ensemble_model = tf.keras.models.load_model(model_path, compile=False)\nencoder = tfds.deprecated.text.SubwordTextEncoder.load_from_file(encoder_path)\ncounter=0\ndef clean_text(input_text):\n    # Replace URLs in the text\n    input_text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', input_text)\n    # Remove numbers\n    input_text = re.sub(r'\\d+', '', input_text)\n    # Remove punctuation\n    translator = str.maketrans('', '', string.punctuation.replace('?', ''))",
+        "detail": "app_final",
+        "documentation": {}
+    },
+    {
+        "label": "encoder",
+        "kind": 5,
+        "importPath": "app_final",
+        "description": "app_final",
+        "peekOfCode": "encoder = tfds.deprecated.text.SubwordTextEncoder.load_from_file(encoder_path)\ncounter=0\ndef clean_text(input_text):\n    # Replace URLs in the text\n    input_text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', input_text)\n    # Remove numbers\n    input_text = re.sub(r'\\d+', '', input_text)\n    # Remove punctuation\n    translator = str.maketrans('', '', string.punctuation.replace('?', ''))\n    input_text = input_text.translate(translator)",
+        "detail": "app_final",
+        "documentation": {}
+    }
+]
